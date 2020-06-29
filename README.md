@@ -1,6 +1,6 @@
 # Search Challenge
 
-Search Challenge is a challenge finding most relevant products from a user query.
+Search Challenge is a challenge finding most relevant products for a user query.
 
 For instance
 
@@ -62,14 +62,54 @@ Note that we clean data by lowering entries and decoding HTML escaped characters
 
 ## *Magic* Formula
 
-For each word of a query, we add up the tfidf of that word related to a given product document.
+For each word of a query, we add up the tfidf of the word.
 
 <img src="https://render.githubusercontent.com/render/math?math=\sum_{k}^{} tfidf(w_k,d)">
 
-* *w*, k-th word of the query
+* *w*, k-th word of a query
 * *d*, current document
+
+Let's find "yellow toywatch" as an example
+
+```
+python search.py "yellow toywatch"
+```
+
+Our algorithm returns
+
+```
+Score: 2.660508157504646, {'id': 4838, 'name': 'Jelly Time Only watch yellow', 'brand': 'Toywatch'}
+Score: 2.384013737986109, {'id': 49638, 'name': 'Blue Jelly Watch', 'brand': 'Toywatch'}
+Score: 2.1423313310278136, {'id': 66641, 'name': 'Sammy', 'brand': 'Yellow Box'}
+Score: 2.1423313310278136, {'id': 4083, 'name': 'Ablaze', 'brand': 'Yellow Box'}
+Score: 1.6067484982708604, {'id': 1046, 'name': 'Medis Earbuds Yellow', 'brand': 'Urbanears'}
+Score: 1.6067484982708604, {'id': 50865, 'name': 'Fossil Yellow Bracelet Watch', 'brand': 'Fossil'}
+Score: 1.6067484982708604, {'id': 24758, 'name': 'Yellow Tiered Tee', 'brand': 'Topshop'}
+Score: 1.5893424919907393, {'id': 56368, 'name': 'Fluo Time Only watch black/white', 'brand': 'Toywatch'}
+Score: 1.5893424919907393, {'id': 56383, 'name': 'Gems pavé set watch white', 'brand': 'Toywatch'}
+Score: 1.5893424919907393, {'id': 4833, 'name': 'Jelly Time Only watch black', 'brand': 'Toywatch'}
+```
+
+The first document is the only one of the sample containing both words "yellow" and "toywatch".
+
+```
+Score: 2.660508157504646, {'id': 4838, 'name': 'Jelly Time Only watch yellow', 'brand': 'Toywatch'}
+```
+
+The score logically is relativelly high.
+
+By analysing the corpus we see that "yellow" appears into 112 documents while "toywatch" appears into 5 documents. Consequently, "toywatch" has more weight.
+
+```
+Score: 2.384013737986109, {'id': 49638, 'name': 'Blue Jelly Watch', 'brand': 'Toywatch'}
+Score: 2.1423313310278136, {'id': 66641, 'name': 'Sammy', 'brand': 'Yellow Box'}
+Score: 2.1423313310278136, {'id': 4083, 'name': 'Ablaze', 'brand': 'Yellow Box'}
+```
+
+By comparing top 2, 3 and 4 we see that even if the document 49638 has 1 more words than the 2 others the weight of "toywatch" gives more importance to the document.
 
 # Indexes
 
-# Installation
 
+
+# Installation

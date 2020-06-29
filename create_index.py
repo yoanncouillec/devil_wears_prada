@@ -105,5 +105,6 @@ if __name__ == "__main__":
     #call_with_monitor(index_by_global_vocabulary)
     call_with_monitor(index_by_term)
     call_with_monitor(dump_index)
-    print(index["by_id"])
+    print(len(index["by_term"]["yellow"]))
+    print(len(index["by_term"]["toywatch"]))
     #print(index["by_brand"])
