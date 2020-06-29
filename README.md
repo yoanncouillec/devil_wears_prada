@@ -179,7 +179,7 @@ mkdir testdir && tar -C testdir -xzvf search_challenge.tar.gz
 
 ## Install dependencies
 
-First of all, install all needed libraries
+Install all needed libraries
 
 ```
 pip install -r requirements.txt
