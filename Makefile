@@ -1,3 +1,6 @@
+ARCHIVE=search_challenge.tar.gz
+DIR=testdir
+
 index:
 	python create_index.py
 
@@ -11,6 +14,12 @@ test:
 	python search.py "prada perforated runway duffel bag"
 	python search.py "guess top"
 	python search.py "ralph lauren vest"
+
+build:
+	tar czvf $(ARCHIVE) Makefile create_index.py search.py search_dataset.json requirements.txt
+
+extract:
+	mkdir $(DIR) && tar -C $(DIR) -xzvf $(ARCHIVE)
 
 clean:
 	rm index.json

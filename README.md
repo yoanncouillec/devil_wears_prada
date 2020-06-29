@@ -162,9 +162,8 @@ This index helps in computing the IDF efficiently.
 
 ## Requirements
 
-   - Python 3.6.7
-   - Pip 19.2.3
-   - Data set of products in a file named `search_dataset.json`
+   - Python 3.7.4
+   - Pip 19.0.3
 
 ## Install dependencies
 

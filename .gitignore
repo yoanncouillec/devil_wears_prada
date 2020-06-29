@@ -1,3 +1,4 @@
 *.json
 *~
-venv
+myvenv
+*.tar.gz
