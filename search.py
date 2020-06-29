@@ -81,7 +81,7 @@ if __name__ == "__main__":
     query = sys.argv[1]
     ids = set()
 
-    print(find_brands_in_query(query))
+    #print(find_brands_in_query(query))
     
     for word in query.split():
         x = set(find_by_term(word))
