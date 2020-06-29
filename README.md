@@ -60,7 +60,7 @@ Note that we clean data by lowering entries and decoding HTML escaped characters
 
 ## *Magic* Formula
 
-<a href="https://www.codecogs.com/eqnedit.php?latex=\sum_{k}^{}&space;tfidf(w_k,d)" target="_blank"><img src="https://latex.codecogs.com/gif.latex?\sum_{k}^{}&space;tfidf(w_k,d)" title="\sum_{k}^{} tfidf(w_k,d)" /></a>
+<img src="https://render.githubusercontent.com/render/math?math=\sum_{k}^{} tfidf(w_k,d)">
 
 # Indexes
 
