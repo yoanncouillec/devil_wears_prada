@@ -58,9 +58,9 @@ For instance
 Note that we clean data by lowering entries and decoding HTML escaped characters. We do the exact same pre-processing for queries.
 
 
-## Formula
+## Magic Formula
 
-<img src="https://render.githubusercontent.com/render/math?math=\sum_{n=1}^{\infty} 2^{-n} = 1">
+<img src="https://render.githubusercontent.com/render/math?math=\sum_{k}^{} tfidf(w_k,d) = 1">
 
 # Indexes
 
