@@ -2,13 +2,13 @@
 
 Search Challenge is a challenge finding most relevant products from a user query.
 
-For instance, 
+For instance
 
 ```
 python search.py "prada shirt"
 ```
 
-would print
+Prints:
 
 ```
 Score: xxx, {'id': 20636, 'name': 'Plaid Shirt', 'brand': 'Prada'}
@@ -34,15 +34,17 @@ A document contains:
 * a *name* of the product with common information like color, type of clothes, etc.
 * the *brand* of the product
 
-## TF-IDF Based Score
+## TF-IDF
 
 To find relevant documents, we compute a score based on TF-IDF.
 
 Recall that TF gives the frequency of a term into a text, while IDF gives the importance of a term in a corpus of documents.
 
-A query mixes brand name and product name in a undetermined order, we preprocessed products' documents in a way that brand and name are merged together for each document as a list of words.
+## Pre-processing
 
-For instance,
+A query mixes brand name and product name in a undetermined order, we pre-processed products' documents in a way that brand and name are merged together for each document as a list of words.
+
+For instance
 
 ```
 {
@@ -53,7 +55,13 @@ For instance,
 }
 ```
 
-Note that we cleaned data by lowering entry, removing special characters, and decoding HTML escaped characters.
+Note that we clean data by lowering entries and decoding HTML escaped characters. We do the exact same pre-processing for queries.
+
+
+## Score formula
+
+<img src="https://latex.codecogs.com/svg.latex?\Large&space;x=\frac{-b\pm\sqrt{b^2-4ac}}{2a}" title="\Large x=\frac{-b\pm\sqrt{b^2-4ac}}{2a}" />
+
 
 # Indexes
 
