@@ -1,4 +1,4 @@
-forfrom itertools import combinations
+from itertools import combinations
 import sys
 import json
 import math
