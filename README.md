@@ -42,7 +42,7 @@ Recall that TF gives the frequency of a term into a text.
 
 While IDF gives the importance of a term in a corpus of documents.
 
-## Pre-processing
+# Pre-processing
 
 A query mixes brand name and product name in a undetermined order, we pre-processed products' documents in a way that brand and name are merged together for each document as a list of words.
 
