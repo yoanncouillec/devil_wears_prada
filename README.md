@@ -190,4 +190,16 @@ You can test predefined queries
 make test
 ```
 
+## Test with your queries
+
+You are free to call
+
+```
+python search.py "your query"
+```
+
+Or you can the call to the test Makefile directive
+
 # Further improvements
+
+- Remove brand in queries and make TF-IDF on names and levenstein on brand.
