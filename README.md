@@ -23,3 +23,18 @@ Score: xxx, {'id': 44040, 'name': 'Floral Sneaker', 'brand': 'Prada'}
 Score: xxx, {'id': 31753, 'name': 'Shoulder Bag', 'brand': 'Prada'}
 ```
 
+# Score
+
+For each user query, a list of 10 top results is returned. Each returned document is associated with a score.
+
+A document contains:
+* an unique *id*
+* a *name* of the product with common information like color, type of clothes, etc.
+* the *brand* of the product
+
+To find relevant documents, we compute a score based on TF-IDF.
+
+Recall that TF gives the frequency of a term into a text, while IDF gives the importance of a term in a corpus of document
+
+# Installation
+
