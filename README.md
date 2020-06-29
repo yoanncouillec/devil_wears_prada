@@ -27,14 +27,14 @@ Score: xxx, {'id': 31753, 'name': 'Shoulder Bag', 'brand': 'Prada'}
 
 For each user query, a list of 10 top results is returned. Each returned document is associated with a score.
 
-## Document Structure
+# Document Structure
 
 A document contains:
 * an unique *id*
 * a *name* of the product with common information like color, type of clothes, etc.
 * the *brand* of the product
 
-## TF-IDF
+# TF-IDF
 
 To find relevant documents, we compute a score based on TF-IDF.
 
@@ -60,7 +60,7 @@ For instance
 Note that we clean data by lowering entries and decoding HTML escaped characters. We do the exact same pre-processing for queries.
 
 
-## *Magic* Formula
+# *Magic* Formula
 
 For each word of a query, we add up the tfidf of the word.
 
@@ -68,6 +68,8 @@ For each word of a query, we add up the tfidf of the word.
 
 * *w*, k-th word of a query
 * *d*, current document
+
+# Example
 
 Let's find "yellow toywatch" as an example
 
