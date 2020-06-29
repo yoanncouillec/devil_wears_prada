@@ -30,7 +30,7 @@ For each user query, a list of 10 top results is returned. Each returned documen
 # Document Structure
 
 A document contains:
-* an unique *id*
+* a unique *id*
 * a *name* of the product with common information like color, type of clothes, etc.
 * the *brand* of the product
 
@@ -98,7 +98,7 @@ The first document is the only one of the sample containing both words "yellow" 
 Score: 2.660508157504646, {'id': 4838, 'name': 'Jelly Time Only watch yellow', 'brand': 'Toywatch'}
 ```
 
-The score logically is relativelly high.
+The score logically is relatively high.
 
 By analysing the corpus we see that "yellow" appears into 112 documents while "toywatch" appears into 5 documents. Consequently, "toywatch" has more weight.
 
@@ -108,10 +108,34 @@ Score: 2.1423313310278136, {'id': 66641, 'name': 'Sammy', 'brand': 'Yellow Box'}
 Score: 2.1423313310278136, {'id': 4083, 'name': 'Ablaze', 'brand': 'Yellow Box'}
 ```
 
-By comparing top 2, 3 and 4 we see that even if the document 49638 has 1 more words than the 2 others the weight of "toywatch" gives more importance to the document.
+By comparing top 2, 3 and 4, we see that even if the document 49638 has 1 more words than the 2 others the weight of "toywatch" gives more importance to the document.
 
 # Indexes
 
+Dealing with huge data may be time and space consuming. We created several indexes to access data in O(1) as much as possible. All indexes are stored into a single Python dictionnary and is saved as a json file.
 
+The first one, stores documents by ids
+
+```
+{ 
+  12829: {
+    'id': 12829,
+    'name': 'Teens Jess Military Ponte Roma Shift Dress',
+    'brand': 'Boohoo',
+    'bag_of_words': ['shift', 'roma', 'dress', 'military', 'ponte', 'teens', 'jess', 'boohoo']
+  },
+  35115: {
+    'id': 35115,
+    'name': 'Military S/S Scoop-Neck T-Shirt',
+    'brand': 'Splendid',
+    'bag_of_words': ['splendid', 'military', 'scoop-neck', 't-shirt', 's/s']
+  }
+...
+}
+```
 
 # Installation
+
+
+
+# Further improvements
