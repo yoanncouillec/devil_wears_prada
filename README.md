@@ -165,6 +165,12 @@ This index helps in computing the IDF efficiently.
    - Python 3.7.4
    - Pip 19.0.3
 
+It is recommended you first create a virtual environment.
+
+```
+python -m venv venv && source venv/bin/activate
+```
+
 ## Extract archive
 
 ```
