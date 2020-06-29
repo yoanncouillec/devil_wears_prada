@@ -38,7 +38,9 @@ A document contains:
 
 To find relevant documents, we compute a score based on TF-IDF.
 
-Recall that TF gives the frequency of a term into a text, while IDF gives the importance of a term in a corpus of documents.
+Recall that TF gives the frequency of a term into a text.
+
+While IDF gives the importance of a term in a corpus of documents.
 
 ## Pre-processing
 
@@ -60,9 +62,12 @@ Note that we clean data by lowering entries and decoding HTML escaped characters
 
 ## *Magic* Formula
 
+For each word of a query, we add up the tfidf of that word related to a given product document.
+
 <img src="https://render.githubusercontent.com/render/math?math=\sum_{k}^{} tfidf(w_k,d)">
 
-For each word of a query, we sum the tfidf of that word related to a given product document.
+* *w*, k-th word of the query
+* *d*, current document
 
 # Indexes
 
