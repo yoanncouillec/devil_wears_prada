@@ -8,7 +8,7 @@ For instance
 python search.py "prada shirt"
 ```
 
-Prints:
+Prints
 
 ```
 Score: xxx, {'id': 20636, 'name': 'Plaid Shirt', 'brand': 'Prada'}
@@ -61,6 +61,8 @@ Note that we clean data by lowering entries and decoding HTML escaped characters
 ## *Magic* Formula
 
 <img src="https://render.githubusercontent.com/render/math?math=\sum_{k}^{} tfidf(w_k,d)">
+
+For each word of a query, we sum the tfidf of that word related to a given product document.
 
 # Indexes
 
