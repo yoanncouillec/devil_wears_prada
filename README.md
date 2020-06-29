@@ -168,7 +168,7 @@ This index helps in computing the IDF efficiently.
 It is recommended you first create a virtual environment.
 
 ```
-python -m venv venv && source venv/bin/activate
+python3 -m venv venv && source venv/bin/activate
 ```
 
 ## Extract archive
