@@ -12,4 +12,5 @@ test:
 	python search.py "guess top"
 	python search.py "ralph lauren vest"
 
-
+clean:
+	rm index.json
