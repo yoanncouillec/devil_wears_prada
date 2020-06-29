@@ -1,4 +1,4 @@
-from itertools import combinations
+forfrom itertools import combinations
 import sys
 import json
 import math
@@ -98,6 +98,9 @@ if __name__ == "__main__":
     results.sort(key=lambda x: x["score"], reverse=True)
 
     i = 0
+
+    if len(results) == 0:
+        print("No matching documents found for query \"{}\"".format(query))
     
     for doc in results:
         print("Score: {}, {}".format(doc["score"],

@@ -214,3 +214,7 @@ Or you can the call to the test Makefile directive
 # Further improvements
 
 - Remove brand in queries and make TF-IDF on names and levenstein on brand.
+- Prefixes
+  - Consider adding an index of all possible prefixes
+  - A Levenshtein measure for each prefix may modulate final score of a query
+
