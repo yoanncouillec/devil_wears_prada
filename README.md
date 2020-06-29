@@ -27,14 +27,35 @@ Score: xxx, {'id': 31753, 'name': 'Shoulder Bag', 'brand': 'Prada'}
 
 For each user query, a list of 10 top results is returned. Each returned document is associated with a score.
 
+## Document Structure
+
 A document contains:
 * an unique *id*
 * a *name* of the product with common information like color, type of clothes, etc.
 * the *brand* of the product
 
+## TF-IDF Based Score
+
 To find relevant documents, we compute a score based on TF-IDF.
 
-Recall that TF gives the frequency of a term into a text, while IDF gives the importance of a term in a corpus of document
+Recall that TF gives the frequency of a term into a text, while IDF gives the importance of a term in a corpus of documents.
+
+A query mixes brand name and product name in a undetermined order, we preprocessed products' documents in a way that brand and name are merged together for each document as a list of words.
+
+For instance,
+
+```
+{
+  'id': 55451,
+  'name': "'Hurric' Jacket",
+  'brand': 'K-Way',
+  'bag_of_words': ['k-way', 'hurric', 'jacket']
+}
+```
+
+Note that we cleaned data by lowering entry, removing special characters, and decoding HTML escaped characters.
+
+# Indexes
 
 # Installation
 
