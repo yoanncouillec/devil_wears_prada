@@ -58,9 +58,9 @@ For instance
 Note that we clean data by lowering entries and decoding HTML escaped characters. We do the exact same pre-processing for queries.
 
 
-## Magic Formula
+## "Magic" Formula
 
-<img src="https://render.githubusercontent.com/render/math?math=\sum_{k}^{} tfidf(w_k,d) = 1">
+<a href="https://www.codecogs.com/eqnedit.php?latex=\sum_{k}^{}&space;tfidf(w_k,d)" target="_blank"><img src="https://latex.codecogs.com/gif.latex?\sum_{k}^{}&space;tfidf(w_k,d)" title="\sum_{k}^{} tfidf(w_k,d)" /></a>
 
 # Indexes
 
