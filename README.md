@@ -60,7 +60,7 @@ Note that we clean data by lowering entries and decoding HTML escaped characters
 
 ## Formula
 
-<img src="https://render.githubusercontent.com/render/math?math=e^{i \pi} = -2">
+<img src="https://render.githubusercontent.com/render/math?math=\sum_{n=1}^{\infty} 2^{-n} = 1">
 
 # Indexes
 
