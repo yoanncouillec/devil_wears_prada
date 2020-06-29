@@ -165,6 +165,12 @@ This index helps in computing the IDF efficiently.
    - Python 3.7.4
    - Pip 19.0.3
 
+## Extract archive
+
+```
+mkdir testdir && tar -C testdir -xzvf search_challenge.tar.gz
+```
+
 ## Install dependencies
 
 First of all, install all needed libraries
