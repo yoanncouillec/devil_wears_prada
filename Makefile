@@ -1,4 +1,4 @@
-init:
+index:
 	python create_index.py
 
 test:

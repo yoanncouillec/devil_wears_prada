@@ -114,6 +114,8 @@ By comparing top 2, 3 and 4, we see that even if the document 49638 has 1 more w
 
 Dealing with huge data may be time and space consuming. We created several indexes to access data in O(1) as much as possible. All indexes are stored into a single Python dictionnary and is saved as a json file.
 
+## By IDs
+
 The first one, stores documents by ids
 
 ```
@@ -129,13 +131,63 @@ The first one, stores documents by ids
     'name': 'Military S/S Scoop-Neck T-Shirt',
     'brand': 'Splendid',
     'bag_of_words': ['splendid', 'military', 'scoop-neck', 't-shirt', 's/s']
-  }
-...
+  },
+  ...
 }
 ```
 
+This index avoids looking a document into a list which would cause O(n) operations.
+
+## By Terms
+
+The second index gives, for a given word, all documents containing that word.
+
+```
+{
+  'renoir': [46983, 46304, 14502, 2106, 1727, 19927, 33194, 46989],
+  'grandstand': [5863],
+  'henderson': [21293, 386],
+  'fordham': [21293],
+  'splendour': [62603, 10386, 14789],
+  'waterlily': [24143, 18737],
+  '511': [52212, 44252, 17500, 36804, 17371],
+  'classic-fit': [31112, 26397, 7189, 36209],
+  ...
+}
+```
+
+This index helps in computing the IDF efficiently.
+
 # Installation
 
+## Requirements
 
+   - Python 3.6.7
+   - Pip 19.2.3
+   - Data set of products in a file named `search_dataset.json`
+
+## Install dependencies
+
+First of all, install all needed libraries
+
+```
+pip install -r requirements.txt
+```
+
+## Create indexes
+
+Then, you create all indexes
+
+```
+make index
+```
+
+## Launch queries
+
+You can test predefined queries
+
+```
+make test
+```
 
 # Further improvements
