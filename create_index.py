@@ -1,23 +1,39 @@
+import os
 import sys
 import json
 import time
 import inspect
 import html
+import math
+
+def convert_size(size_bytes):
+   if size_bytes == 0:
+       return "0B"
+   size_name = ("B", "KB", "MB", "GB", "TB", "PB", "EB", "ZB", "YB")
+   i = int(math.floor(math.log(size_bytes, 1024)))
+   p = math.pow(1024, i)
+   s = round(size_bytes / p, 2)
+   return "%s %s" % (s, size_name[i])
 
 def build_index_of_products_by_id(products):
+
     """
     Build an index of products using ID as key.
     """
+
     print ("{:40}".format(inspect.stack()[0][3]), end='', flush=True)
     products_by_id = {}
     for product in products:
         products_by_id[product["id"]] = product
     return products_by_id
 
+
 def build_index_of_bag_of_words_by_id(products_by_id):
+
     """
     Build an index of bows using ID as key.
     """
+
     print ("{:40}".format(inspect.stack()[0][3]), end='', flush=True)
     bow_by_id = {}
     for id in products_by_id:
@@ -34,10 +50,13 @@ def build_index_of_bag_of_words_by_id(products_by_id):
         bow_by_id[id] = list(split_name.union(split_brand))
     return bow_by_id
 
+
 def build_index_of_ids_by_brand(products_by_id):
+
     """
     Build an index of IDs using brand as key.
     """
+
     print ("{:40}".format(inspect.stack()[0][3]), end='', flush=True)
     ids_by_brand = {}
     for id in products_by_id:
@@ -47,51 +66,13 @@ def build_index_of_ids_by_brand(products_by_id):
         ids_by_brand[current_brand].append(id)
     return ids_by_brand
 
-def index_by_brand_vocabulary():
-    print ("{:40}".format(inspect.stack()[0][3]), end='', flush=True)
-    index["by_brand_vocabulary"] = {}
-    for product in products:
-        current_brand = product["brand"].lower()
-        for piece_of_brand in current_brand.split():
-            if not piece_of_brand in index["by_brand_vocabulary"]:
-                index["by_brand_vocabulary"][piece_of_brand] = []
-            index["by_brand_vocabulary"][piece_of_brand].append(product["id"])
-
-def index_by_name():
-    print ("{:40}".format(inspect.stack()[0][3]), end='', flush=True)
-    index["by_name"] = {}
-    for product in products:
-        current_name = product["name"].lower()
-        if not current_name in index["by_name"]:
-            index["by_name"][current_name] = []
-        index["by_name"][current_name].append(product["id"])
-
-def index_by_name_vocabulary():
-    print ("{:40}".format(inspect.stack()[0][3]), end='', flush=True)
-    index["by_name_vocabulary"] = {}
-    for product in products:
-        current_name = product["name"].lower()
-        for piece_of_name in current_name.split():
-            if not piece_of_name in index["by_name_vocabulary"]:
-                index["by_name_vocabulary"][piece_of_name] = []
-            index["by_name_vocabulary"][piece_of_name].append(product["id"])
-
-def index_by_global_vocabulary():
-    print ("{:40}".format(inspect.stack()[0][3]), end='', flush=True)
-    index["by_global_vocabulary"] = {}
-    for product in products:
-        current_name = product["name"].lower()
-        for piece_of_name in current_name.split():
-            if not piece_of_name in index["by_global_vocabulary"]:
-                index["by_global_vocabulary"][piece_of_name] = []
-            index["by_global_vocabulary"][piece_of_name].append(product["id"])
-        current_brand = product["brand"].lower()
-        for piece_of_brand in current_brand.split():
-            if not piece_of_brand in index["by_global_vocabulary"]:
-                index["by_global_vocabulary"][piece_of_brand] = []
-            index["by_global_vocabulary"][piece_of_brand].append(product["id"])
-
+            
 def build_index_of_ids_by_term(bows_by_id):
+
+    """
+    Build an index of IDs using term as key.
+    """
+
     print ("{:40}".format(inspect.stack()[0][3]), end='', flush=True)
     ids_by_term = {}
     for id in bows_by_id:
@@ -102,6 +83,11 @@ def build_index_of_ids_by_term(bows_by_id):
     return ids_by_term
 
 def build_index_of_ids_by_collocation(ids_by_term, bows_by_id):
+
+    """
+    Build an index of IDs using collocation as key.
+    """
+
     print ("{:40}".format(inspect.stack()[0][3]), end='', flush=True)
     ids_by_collocation = {}
     for term in ids_by_term:
@@ -114,9 +100,9 @@ def build_index_of_ids_by_collocation(ids_by_term, bows_by_id):
                     ids_by_collocation[term][collocation_term].append(collocation_id)
     return ids_by_collocation
 
-def dump_index():
+def dump_index(index, filename):
     print ("{:40}".format(inspect.stack()[0][3]), end='', flush=True)
-    index_file = open("index.json","w")
+    index_file = open(filename,"w")
     json.dump(index, index_file)
     index_file.close()
             
@@ -145,7 +131,8 @@ if __name__ == "__main__":
 
     index = {}
     products = json.load(open("search_dataset.json"))
-
+    index_filename = "index.json"
+    
     index["products_by_id"] = call_with_monitor_1(build_index_of_products_by_id,
                                                   products)
     index["bows_by_id"] = call_with_monitor_1(build_index_of_bag_of_words_by_id,
@@ -158,4 +145,6 @@ if __name__ == "__main__":
                                                       index["ids_by_term"],
                                                       index["bows_by_id"])
 
-    call_with_monitor_0(dump_index)
+    call_with_monitor_2(dump_index, index, index_filename)
+    print ("{:40}".format(index_filename), end='', flush=True)
+    print(convert_size(os.stat(index_filename).st_size))
