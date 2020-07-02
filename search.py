@@ -76,17 +76,32 @@ def find_brands_in_query(query):
                 })
     return res
 
+def get_collocation_weight(w1,w2):
+    try:
+        return len(index["by_collocation"][c[0]][c[1]])
+    except:
+        return 0
+
 if __name__ == "__main__":
 
     query = sys.argv[1]
     ids = set()
 
     #print(find_brands_in_query(query))
+
+    words = query.split()
     
-    for word in query.split():
+    for word in words:
         x = set(find_by_term(word))
         ids = ids.union(x)
 
+    for c in list(combinations(words, 2)):
+        weight = get_collocation_weight(c[0], c[1])
+        if weight != 0:
+            print("{} => {}, {}".format(c, weight, float(1) / float(weight)))
+        else:
+            print("{} => {}, {}".format(c, weight, None))
+            
     results = []
         
     for id in ids:
