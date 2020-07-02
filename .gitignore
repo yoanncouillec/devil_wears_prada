@@ -2,3 +2,5 @@
 *~
 myvenv
 *.tar.gz
+testdir
+venv

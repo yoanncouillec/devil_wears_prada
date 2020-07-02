@@ -84,6 +84,18 @@ def index_by_term():
                 index["by_term"][word] = []
             index["by_term"][word].append(id)
 
+def index_by_collocation():
+    print ("{:30}".format(inspect.stack()[0][3]), end='')
+    index["by_collocation"] = {}
+    for term in index["by_term"]:
+        index["by_collocation"][term] = {}
+        for collocation_id in index["by_term"][term]:
+            for collocation_term in index["by_id"][collocation_id]["bag_of_words"]:
+                if collocation_term != term:
+                    if collocation_term not in index["by_collocation"][term]:
+                        index["by_collocation"][term][collocation_term] = []
+                    index["by_collocation"][term][collocation_term].append(collocation_id)
+
 def dump_index():
     print ("{:30}".format(inspect.stack()[0][3]), end='')
     index_file = open("index.json","w")
@@ -104,8 +116,13 @@ if __name__ == "__main__":
     #call_with_monitor(index_by_name_vocabulary)
     #call_with_monitor(index_by_global_vocabulary)
     call_with_monitor(index_by_term)
+    call_with_monitor(index_by_collocation)
     call_with_monitor(dump_index)
     #print(len(index["by_term"]["yellow"]))
     #print(len(index["by_term"]["toywatch"]))
     #print(index["by_term"])
     #print(index["by_brand"])
+    #print(index["by_collocation"])
+    #for t in index["by_collocation"]["ralph"]:
+    #    print("{} => {}".format(t,len(index["by_collocation"]["ralph"][t])))
+    #print(len(index["by_collocation"]["lauren"]["ralph"]))
