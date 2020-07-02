@@ -5,6 +5,9 @@ index:
 	python create_index.py
 
 test:
+	python test.py
+
+test_queries:
 	python search.py "yellow toywatch"
 	python search.py "asos skinny jeans"
 	python search.py "toyota car"

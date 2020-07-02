@@ -26,7 +26,7 @@ def find_by_global_vocabulary(query):
 
 def find_by_term(query):
     try:
-        return index["by_term"][query]
+        return index["ids_by_term"][query]
     except:
         return []
 
@@ -58,14 +58,14 @@ def idf(term):
     if len(find_by_term(term)) == 0:
         return 0
     else:
-        return(math.log(len(index["by_id"])/(len(index["by_term"][term]))))
+        return(math.log(len(index["products_by_id"])/(len(index["ids_by_term"][term]))))
 
 def tf_idf(term, document):
     return tf(term,document) * idf(term)
 
 def find_brands_in_query(query):
     res = []
-    for brand in index["by_brand"]:
+    for brand in index["ids_by_brand"]:
         i = query.find(brand)
         if i != -1:
             res.append(
@@ -78,7 +78,7 @@ def find_brands_in_query(query):
 
 def get_collocation_weight(w1,w2):
     try:
-        return len(index["by_collocation"][c[0]][c[1]])
+        return len(index["ids_by_collocation"][c[0]][c[1]])
     except:
         return 0
 
@@ -87,7 +87,7 @@ if __name__ == "__main__":
     query = sys.argv[1]
     ids = set()
 
-    #print(find_brands_in_query(query))
+    print(find_brands_in_query(query))
 
     words = query.split()
     
@@ -107,7 +107,7 @@ if __name__ == "__main__":
     for id in ids:
         score = 0
         for w in query.split():
-            score += tf_idf(w, index["by_id"][str(id)]["bag_of_words"])
+            score += tf_idf(w, index["bows_by_id"][str(id)])
         results.append({"id": id, "score": score})
 
     results.sort(key=lambda x: x["score"], reverse=True)
@@ -121,8 +121,8 @@ if __name__ == "__main__":
         print("Score: {}, {}".format(doc["score"],
                                      {
                                          "id":doc["id"],
-                                         "name": index["by_id"][str(doc["id"])]["name"],
-                                         "brand": index["by_id"][str(doc["id"])]["brand"]
+                                         "name": index["products_by_id"][str(doc["id"])]["name"],
+                                         "brand": index["products_by_id"][str(doc["id"])]["brand"]
                                      }))
         i += 1
         if i == 10:

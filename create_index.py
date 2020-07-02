@@ -4,13 +4,25 @@ import time
 import inspect
 import html
 
-index = {}
-products = json.load(open("search_dataset.json"))
-
-def index_by_id():
-    print ("{:30}".format(inspect.stack()[0][3]), end='')
-    index["by_id"] = {}
+def build_index_of_products_by_id(products):
+    """
+    Build an index of products using ID as key.
+    """
+    print ("{:40}".format(inspect.stack()[0][3]), end='', flush=True)
+    products_by_id = {}
     for product in products:
+        products_by_id[product["id"]] = product
+    return products_by_id
+
+def build_index_of_bag_of_words_by_id(products_by_id):
+    """
+    Build an index of bows using ID as key.
+    """
+    print ("{:40}".format(inspect.stack()[0][3]), end='', flush=True)
+    bow_by_id = {}
+    for id in products_by_id:
+        bow_by_id[id] = {}
+        product = products_by_id[id]
         split_name = set(html.unescape(product["name"])
                          .replace('"', '').replace("'", '')
                          .lower()
@@ -19,20 +31,24 @@ def index_by_id():
                           .replace('"', '').replace("'", '')
                           .lower()
                           .split())
-        product["bag_of_words"] = list(split_name.union(split_brand))
-        index["by_id"][product["id"]] = product
+        bow_by_id[id] = list(split_name.union(split_brand))
+    return bow_by_id
 
-def index_by_brand():
-    print ("{:30}".format(inspect.stack()[0][3]), end='')
-    index["by_brand"] = {}
-    for product in products:
-        current_brand = product["brand"].lower()
-        if not current_brand in index["by_brand"]:
-            index["by_brand"][current_brand] = []
-        index["by_brand"][current_brand].append(product["id"])
+def build_index_of_ids_by_brand(products_by_id):
+    """
+    Build an index of IDs using brand as key.
+    """
+    print ("{:40}".format(inspect.stack()[0][3]), end='', flush=True)
+    ids_by_brand = {}
+    for id in products_by_id:
+        current_brand = products_by_id[id]["brand"].lower()
+        if not current_brand in ids_by_brand:
+            ids_by_brand[current_brand] = []
+        ids_by_brand[current_brand].append(id)
+    return ids_by_brand
 
 def index_by_brand_vocabulary():
-    print ("{:30}".format(inspect.stack()[0][3]), end='')
+    print ("{:40}".format(inspect.stack()[0][3]), end='', flush=True)
     index["by_brand_vocabulary"] = {}
     for product in products:
         current_brand = product["brand"].lower()
@@ -42,7 +58,7 @@ def index_by_brand_vocabulary():
             index["by_brand_vocabulary"][piece_of_brand].append(product["id"])
 
 def index_by_name():
-    print ("{:30}".format(inspect.stack()[0][3]), end='')
+    print ("{:40}".format(inspect.stack()[0][3]), end='', flush=True)
     index["by_name"] = {}
     for product in products:
         current_name = product["name"].lower()
@@ -51,7 +67,7 @@ def index_by_name():
         index["by_name"][current_name].append(product["id"])
 
 def index_by_name_vocabulary():
-    print ("{:30}".format(inspect.stack()[0][3]), end='')
+    print ("{:40}".format(inspect.stack()[0][3]), end='', flush=True)
     index["by_name_vocabulary"] = {}
     for product in products:
         current_name = product["name"].lower()
@@ -61,7 +77,7 @@ def index_by_name_vocabulary():
             index["by_name_vocabulary"][piece_of_name].append(product["id"])
 
 def index_by_global_vocabulary():
-    print ("{:30}".format(inspect.stack()[0][3]), end='')
+    print ("{:40}".format(inspect.stack()[0][3]), end='', flush=True)
     index["by_global_vocabulary"] = {}
     for product in products:
         current_name = product["name"].lower()
@@ -75,54 +91,71 @@ def index_by_global_vocabulary():
                 index["by_global_vocabulary"][piece_of_brand] = []
             index["by_global_vocabulary"][piece_of_brand].append(product["id"])
 
-def index_by_term():
-    print ("{:30}".format(inspect.stack()[0][3]), end='')
-    index["by_term"] = {}
-    for id in index["by_id"]:
-        for word in index["by_id"][id]["bag_of_words"]:
-            if not word in index["by_term"]:
-                index["by_term"][word] = []
-            index["by_term"][word].append(id)
+def build_index_of_ids_by_term(bows_by_id):
+    print ("{:40}".format(inspect.stack()[0][3]), end='', flush=True)
+    ids_by_term = {}
+    for id in bows_by_id:
+        for term in bows_by_id[id]:
+            if not term in ids_by_term:
+                ids_by_term[term] = []
+            ids_by_term[term].append(id)
+    return ids_by_term
 
-def index_by_collocation():
-    print ("{:30}".format(inspect.stack()[0][3]), end='')
-    index["by_collocation"] = {}
-    for term in index["by_term"]:
-        index["by_collocation"][term] = {}
-        for collocation_id in index["by_term"][term]:
-            for collocation_term in index["by_id"][collocation_id]["bag_of_words"]:
+def build_index_of_ids_by_collocation(ids_by_term, bows_by_id):
+    print ("{:40}".format(inspect.stack()[0][3]), end='', flush=True)
+    ids_by_collocation = {}
+    for term in ids_by_term:
+        ids_by_collocation[term] = {}
+        for collocation_id in ids_by_term[term]:
+            for collocation_term in bows_by_id[collocation_id]:
                 if collocation_term != term:
-                    if collocation_term not in index["by_collocation"][term]:
-                        index["by_collocation"][term][collocation_term] = []
-                    index["by_collocation"][term][collocation_term].append(collocation_id)
+                    if collocation_term not in ids_by_collocation[term]:
+                        ids_by_collocation[term][collocation_term] = []
+                    ids_by_collocation[term][collocation_term].append(collocation_id)
+    return ids_by_collocation
 
 def dump_index():
-    print ("{:30}".format(inspect.stack()[0][3]), end='')
+    print ("{:40}".format(inspect.stack()[0][3]), end='', flush=True)
     index_file = open("index.json","w")
     json.dump(index, index_file)
     index_file.close()
             
-def call_with_monitor(func):
+def call_with_monitor_2(func, arg0, arg1):
     begin = time.time()
-    func()
+    ret = func(arg0, arg1)
     end = time.time()
     print(" {:.3f} s".format(end - begin))
+    return ret
+    
+def call_with_monitor_1(func, arg0):
+    begin = time.time()
+    ret = func(arg0)
+    end = time.time()
+    print(" {:.3f} s".format(end - begin))
+    return ret
+    
+def call_with_monitor_0(func):
+    begin = time.time()
+    ret = func()
+    end = time.time()
+    print(" {:.3f} s".format(end - begin))
+    return ret
     
 if __name__ == "__main__":
-    call_with_monitor(index_by_id)
-    call_with_monitor(index_by_brand)
-    #call_with_monitor(index_by_brand_vocabulary)
-    #call_with_monitor(index_by_name)
-    #call_with_monitor(index_by_name_vocabulary)
-    #call_with_monitor(index_by_global_vocabulary)
-    call_with_monitor(index_by_term)
-    call_with_monitor(index_by_collocation)
-    call_with_monitor(dump_index)
-    #print(len(index["by_term"]["yellow"]))
-    #print(len(index["by_term"]["toywatch"]))
-    #print(index["by_term"])
-    #print(index["by_brand"])
-    #print(index["by_collocation"])
-    #for t in index["by_collocation"]["ralph"]:
-    #    print("{} => {}".format(t,len(index["by_collocation"]["ralph"][t])))
-    #print(len(index["by_collocation"]["lauren"]["ralph"]))
+
+    index = {}
+    products = json.load(open("search_dataset.json"))
+
+    index["products_by_id"] = call_with_monitor_1(build_index_of_products_by_id,
+                                                  products)
+    index["bows_by_id"] = call_with_monitor_1(build_index_of_bag_of_words_by_id,
+                                              index["products_by_id"])    
+    index["ids_by_brand"] = call_with_monitor_1(build_index_of_ids_by_brand,
+                                                index["products_by_id"])
+    index["ids_by_term"] = call_with_monitor_1(build_index_of_ids_by_term,
+                                               index["bows_by_id"])
+    index["ids_by_collocation"] = call_with_monitor_2(build_index_of_ids_by_collocation,
+                                                      index["ids_by_term"],
+                                                      index["bows_by_id"])
+
+    call_with_monitor_0(dump_index)
