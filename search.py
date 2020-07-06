@@ -2,6 +2,7 @@ from itertools import combinations
 import sys
 import json
 import math
+import re
 
 index = json.load(open("index.json"))
 products = json.load(open("search_dataset.json"))
@@ -63,17 +64,21 @@ def idf(term):
 def tf_idf(term, document):
     return tf(term,document) * idf(term)
 
-def find_brands_in_query(query):
+def get_brand_indexes_in_query(query, brand):
+    return [m.start() for m in re.finditer(brand, query)]
+
+def find_brand_in_query(query):
     res = []
     for brand in index["ids_by_brand"]:
         i = query.find(brand)
         if i != -1:
-            res.append(
-                {
-                    "brand": brand,
-                    "query": query,
-                    "query_without_brand": " ".join(query.replace(brand,"").strip().split())
-                })
+            q = {
+                "brand": brand,
+                "query": query,
+                "query_without_brand": " ".join(query.replace(brand,"").strip().split()),
+                "brand_weight": len(index["ids_by_brand"][brand])
+            }
+            res.append(q)
     return res
 
 def get_collocation_weight(w1,w2):
@@ -87,7 +92,7 @@ if __name__ == "__main__":
     query = sys.argv[1]
     ids = set()
 
-    print(find_brands_in_query(query))
+    print(find_brand_in_query(query))
 
     words = query.split()
     
@@ -97,10 +102,7 @@ if __name__ == "__main__":
 
     for c in list(combinations(words, 2)):
         weight = get_collocation_weight(c[0], c[1])
-        if weight != 0:
-            print("{} => {}, {}".format(c, weight, float(1) / float(weight)))
-        else:
-            print("{} => {}, {}".format(c, weight, None))
+        print("{} => {}".format(c, weight))
             
     results = []
         

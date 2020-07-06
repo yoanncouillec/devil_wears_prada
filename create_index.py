@@ -1,24 +1,14 @@
 import os
 import sys
 import json
-import time
 import inspect
 import html
-import math
-
-def convert_size(size_bytes):
-   if size_bytes == 0:
-       return "0B"
-   size_name = ("B", "KB", "MB", "GB", "TB", "PB", "EB", "ZB", "YB")
-   i = int(math.floor(math.log(size_bytes, 1024)))
-   p = math.pow(1024, i)
-   s = round(size_bytes / p, 2)
-   return "%s %s" % (s, size_name[i])
+import utils # see utils.py
 
 def build_index_of_products_by_id(products):
 
     """
-    Build an index of products using ID as key.
+    Build an index of products using ID as key (ID -> products).
     """
 
     print ("{:40}".format(inspect.stack()[0][3]), end='', flush=True)
@@ -31,7 +21,7 @@ def build_index_of_products_by_id(products):
 def build_index_of_bag_of_words_by_id(products_by_id):
 
     """
-    Build an index of bows using ID as key.
+    Build an index of bows using ID as key (ID -> bows).
     """
 
     print ("{:40}".format(inspect.stack()[0][3]), end='', flush=True)
@@ -54,13 +44,13 @@ def build_index_of_bag_of_words_by_id(products_by_id):
 def build_index_of_ids_by_brand(products_by_id):
 
     """
-    Build an index of IDs using brand as key.
+    Build an index of IDs using brand as key (brand -> IDs).
     """
 
     print ("{:40}".format(inspect.stack()[0][3]), end='', flush=True)
     ids_by_brand = {}
     for id in products_by_id:
-        current_brand = products_by_id[id]["brand"].lower()
+        current_brand = products_by_id[id]["brand"].replace("*","").replace("+", "").lower()
         if not current_brand in ids_by_brand:
             ids_by_brand[current_brand] = []
         ids_by_brand[current_brand].append(id)
@@ -70,7 +60,7 @@ def build_index_of_ids_by_brand(products_by_id):
 def build_index_of_ids_by_term(bows_by_id):
 
     """
-    Build an index of IDs using term as key.
+    Build an index of IDs using term as key (term -> IDs).
     """
 
     print ("{:40}".format(inspect.stack()[0][3]), end='', flush=True)
@@ -85,7 +75,7 @@ def build_index_of_ids_by_term(bows_by_id):
 def build_index_of_ids_by_collocation(ids_by_term, bows_by_id):
 
     """
-    Build an index of IDs using collocation as key.
+    Build an index of IDs using collocation as key (terms -> IDs)
     """
 
     print ("{:40}".format(inspect.stack()[0][3]), end='', flush=True)
@@ -106,45 +96,33 @@ def dump_index(index, filename):
     json.dump(index, index_file)
     index_file.close()
             
-def call_with_monitor_2(func, arg0, arg1):
-    begin = time.time()
-    ret = func(arg0, arg1)
-    end = time.time()
-    print(" {:.3f} s".format(end - begin))
-    return ret
-    
-def call_with_monitor_1(func, arg0):
-    begin = time.time()
-    ret = func(arg0)
-    end = time.time()
-    print(" {:.3f} s".format(end - begin))
-    return ret
-    
-def call_with_monitor_0(func):
-    begin = time.time()
-    ret = func()
-    end = time.time()
-    print(" {:.3f} s".format(end - begin))
-    return ret
-    
 if __name__ == "__main__":
 
     index = {}
     products = json.load(open("search_dataset.json"))
     index_filename = "index.json"
     
-    index["products_by_id"] = call_with_monitor_1(build_index_of_products_by_id,
-                                                  products)
-    index["bows_by_id"] = call_with_monitor_1(build_index_of_bag_of_words_by_id,
-                                              index["products_by_id"])    
-    index["ids_by_brand"] = call_with_monitor_1(build_index_of_ids_by_brand,
-                                                index["products_by_id"])
-    index["ids_by_term"] = call_with_monitor_1(build_index_of_ids_by_term,
-                                               index["bows_by_id"])
-    index["ids_by_collocation"] = call_with_monitor_2(build_index_of_ids_by_collocation,
-                                                      index["ids_by_term"],
-                                                      index["bows_by_id"])
+    index["products_by_id"] = utils.call_with_monitor_1(
+        build_index_of_products_by_id,
+        products)
+    
+    index["bows_by_id"] = utils.call_with_monitor_1(
+        build_index_of_bag_of_words_by_id,
+        index["products_by_id"])
+    
+    index["ids_by_brand"] = utils.call_with_monitor_1(
+        build_index_of_ids_by_brand,
+        index["products_by_id"])
+    
+    index["ids_by_term"] = utils.call_with_monitor_1(
+        build_index_of_ids_by_term,
+        index["bows_by_id"])
+    
+    index["ids_by_collocation"] = utils.call_with_monitor_2(
+        build_index_of_ids_by_collocation,
+        index["ids_by_term"],
+        index["bows_by_id"])
 
-    call_with_monitor_2(dump_index, index, index_filename)
+    utils.call_with_monitor_2(dump_index, index, index_filename)
     print ("{:40}".format(index_filename), end='', flush=True)
-    print(convert_size(os.stat(index_filename).st_size))
+    print(utils.convert_size(os.stat(index_filename).st_size))
